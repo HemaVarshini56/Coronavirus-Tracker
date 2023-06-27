@@ -1,0 +1,63 @@
+<html>
+	<head>
+	<meta charset="ISO-8859-1">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+<title>view chart</title>
+</head>
+<body>
+<h2  id="collectChartData"></h2>
+
+	<div class="card-header">
+		<h1>Corona virus death report</h1>
+	</div>
+	<div class="card-body">
+		<canvas id="myChart" type="bar" width="800" heigth="450"></canvas>
+		</div>
+</div>
+<script>
+ getData();
+  
+        async function getData() {
+            const response = await fetch('http://localhost:8082/collectChartData');
+            console.log(response);
+            console.log("entering into data");
+            const data = await response.json();
+            console.log(data);
+            console.log('barChartData length='+data.length);
+  
+            countries = [];
+            deathcount = [];
+            for (i = 0; i < data.length; i++) {
+                countries.push(data[i].country);
+                deathcount.push(data[i].latestTotalDeaths);
+            }
+  
+  
+            new Chart(document.getElementById("myChart"), {
+                type: 'bar',
+                data: {
+                    labels: countries,
+                    datasets: [
+                        {
+                            label: "countries",
+                           
+                            data: deathcount
+                        }
+                    ]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'view in Bar Chart'
+                    }
+                }
+            });
+  
+        }
+  
+    </script>
+</body>
+</html>
